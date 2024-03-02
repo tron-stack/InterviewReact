@@ -1,12 +1,16 @@
 # ALL PHOTOS AND IMAGES CREDIT GOES TO WWW.FREEPIK.COM FOR STOCK IMAGES
 
 # Getting Started with Create React App
-<a href="https://www.freepik.com/search?format=search&last_filter=type&last_value=icon&query=download&type=icon">Icon by kliwir art</a>
 
+<a href="https://www.freepik.com/search?format=search&last_filter=type&last_value=icon&query=download&type=icon">Icon by kliwir art</a>
 <a href="https://www.freepik.com/free-ai-image/3d-view-alphabet-letter-k_72417486.htm#fromView=search&page=1&position=3&uuid=05eceb69-561d-4622-bcc3-6141f248e41e">Image by freepik</a>
 <a href="https://www.freepik.com/search?format=search&last_filter=query&last_value=property&query=property&type=icon">Icon by pojok d</a>
 <a href="https://www.freepik.com/search?format=search&last_filter=query&last_value=growing&query=growing&type=icon">Icon by Freepik</a>
 <a href="https://www.freepik.com/search?format=search&last_filter=query&last_value=support&query=support&type=icon">Icon by Arafat Uddin</a>
+<a href="https://www.freepik.com/search?format=search&last_filter=type&last_value=icon&query=service&type=icon">Icon by Uniconlabs</a>
+<a href="https://www.freepik.com/search?format=search&last_filter=query&last_value=legal&query=legal&type=icon">Icon by Handicon</a>
+<a href="https://www.freepik.com/search?format=search&last_filter=page&last_value=2&page=2&query=working&type=icon#uuid=42b5b4e8-d257-49ca-b624-a6e006c97717">Icon by Irfansusanto20</a>
+
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

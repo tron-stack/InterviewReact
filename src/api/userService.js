@@ -1,58 +1,43 @@
-import axios from "axios";
 import { Navigate } from "react-router";
 import axiosClient from "./axios";
-const url = "http://localhost:8000/user";
 
 //dummy user
-const user = {
-  user: {
-    username: "reactUser1",
-    email: "fakeemail@fakeemail344.com",
-    password: "password2345",
-  },
-};
-
+// const user = {
+//   user: {
+//     username: "reactUser1",
+//     email: "fakeemail@fakeemail344.com",
+//     password: "password2345",
+//   },
+// };
+// register fn
 export const registerUser = async (user) => {
   try {
-    await axiosClient
-      .post("/user/register", user)
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("Token", String(res.data.user.token));
-        return res.data.user;
-      })
-      .catch((err) => console.error("err in req: ", err));
+    const res = await axiosClient.post("/user/register", user);
+    return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
   }
 };
-
+//login fn
 export const loginUser = async (user) => {
   try {
-    await axiosClient
-      .post("/user/login", user)
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("Token", String(res.data.user.token));
-        return res.data.user;
-      })
-      .catch((err) => console.error("err in req: ", err));
+    const res = await axiosClient.post("/user/login", user);
+    if (res.data.user.token) {
+      localStorage.setItem("Token", res.data.user.token);
+    }
+    res.data.user.token = "";
+
+    return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
   }
 };
-
+//get all users, admin only
 export const getAllUsers = async () => {
   if (localStorage.getItem("Token")) {
     try {
-      await axiosClient
-        .get("/user/all")
-        .then((res) => {
-          console.log(res.data);
-        return res.data;
-
-        })
-        .catch((err) => console.error("err in req: ", err));
+      const res = await axiosClient.get("/user/all");
+      return res.data;
     } catch (err) {
       console.log("err in catch: ", err);
     }
@@ -60,35 +45,27 @@ export const getAllUsers = async () => {
     console.log("not logged in");
   }
 };
-
-export const logOutUser = () => {
-  localStorage.clear();
-  Navigate("/");
+//logout fn, clear token
+export const logOutUser = async () => {
+  const res = await axiosClient.get("/user/logout",  { headers:{
+    "Content-Type": "application/json",
+    "Token" : localStorage.getItem("Token"),
+  }});
+  return res;
 };
-
+//update user fn/ only admin can change role
 export const updateUser = async (user) => {
   try {
-    await axiosClient
-      .put("/user/update", user)
-      .then((res) => {
-        console.log(res.data);
-        return res.data.user;
-
-      })
-      .catch((err) => console.error("err in req: ", err));
+    const res = await axiosClient.put("/user/update", user, { headers: { Token : localStorage.getItem('Token') }});
+    return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
   }
 };
 export const deleteUser = async (user) => {
   try {
-    await axiosClient
-      .delete("/user/update", updateUser)
-      .then((res) => {
-        console.log(res.data);
-        return res.data.user;
-      })
-      .catch((err) => console.error("err in req: ", err));
+    const res = await axiosClient.delete("/user/update", updateUser, { headers: { Token : localStorage.getItem('Token') }});
+    return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
   }
@@ -97,22 +74,31 @@ export const deleteUser = async (user) => {
 //authentication function, generates new JWT as well
 export const authUser = async (user) => {
   try {
-    await axiosClient.get("/user", user).then((res)=>{
-        console.log(res.data);
-        localStorage.setItem("Token",String(res.data.user.token));
-        return res.data.user;
-    }).catch((err)=>{console.error('err in req', err)});
+    const res = await axiosClient.get("/user", user, { headers: { Token : localStorage.getItem('Token') }});
+    return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
   }
 };
 
 export const profileUser = async (user) => {
-    try {
-        await axiosClient.get('/user/profile', user).then((res)=>{
-            console.log(res.data);
-        return res.data;
+  try {
+    const res = await axiosClient.get("/user/profile", user, { headers: { Token : localStorage.getItem('Token') }});
+    return res.data;
+  } catch (err) {
+    console.log("err in catch: ", err);
+  }
+};
 
-        })
-    } catch(err){console.log('err in catch: ', err)}
-}
+const userService = {
+  getAllUsers,
+  loginUser,
+  logOutUser,
+  profileUser,
+  authUser,
+  registerUser,
+  deleteUser,
+  updateUser,
+};
+
+export default userService;

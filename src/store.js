@@ -1,5 +1,9 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {Tuple, configureStore, createSerializableStateInvariantMiddleware} from '@reduxjs/toolkit';
 import userReducer from './api/userSlice';
+
+// const serializableMiddleWare = createSerializableStateInvariantMiddleware({
+//     ignoredActionPaths: 'headers',
+// })
 
 const store = configureStore({
     reducer: {

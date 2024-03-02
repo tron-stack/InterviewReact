@@ -11,6 +11,8 @@ import logo from '../images/logo/logo-no-background.png'
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function Copyright(props) {
   return (
@@ -33,10 +35,17 @@ function Copyright(props) {
 function Register() {
 
   const navigate = useNavigate();
+  const userState = useSelector((state)=> state.user.user);
 
   const handleClick = () =>{
     navigate('/');
   }
+
+  useEffect(()=>{
+    if(userState.username !== ""){
+      navigate('/landing')
+    }
+  },)
 
 
   const handleSubmit = (event) => {

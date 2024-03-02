@@ -1,21 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  logOutUser,
-  loginUser,
-  updateUser,
-  authUser,
-  deleteUser,
-  getAllUsers,
-  profileUser,
-  registerUser,
-} from "./userService";
+import userService from "./userService";
 
 export const loginSF = createAsyncThunk(
   "user/login",
   async (user, thunkAPI) => {
     try {
-        const res = await loginUser(user)
-        return res;
+      const res = await userService.loginUser(user);
+      return res;
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -27,7 +18,7 @@ export const registerSF = createAsyncThunk(
   "user/register",
   async (user, thunkAPI) => {
     try {
-      return await registerUser(user);
+      return await userService.registerUser(user);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -39,8 +30,7 @@ export const authUserSF = createAsyncThunk(
   "user/auth",
   async (user, thunkAPI) => {
     try {
-      return await authUser(user);
-      
+      return await userService.authUser(user);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -48,15 +38,20 @@ export const authUserSF = createAsyncThunk(
   }
 );
 
-export const logOutUserSF = createAsyncThunk("user/logout", (thunkAPI) => {
- return logOutUser();
+export const logOutUserSF = createAsyncThunk("user/logout", async (thunkAPI) => {
+  try {
+    return await userService.logOutUser();
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue("something went wrong");
+  }
 });
 
 export const updateUserSF = createAsyncThunk(
   "user/update",
   async (user, thunkAPI) => {
     try {
-      return await updateUser(user);
+      return await userService.updateUser(user);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -68,7 +63,7 @@ export const deleteUserSF = createAsyncThunk(
   "user/delete",
   async (user, thunkAPI) => {
     try {
-      return await deleteUser(user);
+      return await userService.deleteUser(user);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -80,8 +75,7 @@ export const profileUserSF = createAsyncThunk(
   "user/profile",
   async (user, thunkAPI) => {
     try {
-      return await profileUser(user);
-      
+      return await userService.profileUser(user);
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("something went wrong");
@@ -90,129 +84,167 @@ export const profileUserSF = createAsyncThunk(
 );
 
 export const getAllUsersSF = createAsyncThunk(
-    'user/getAll',
-    async (thunkAPI)=>{
-        try{
-            const res = await getAllUsers();
-            return res;
-        } catch(err) {
-            console.log(err);
-        }
+  "user/getAll",
+  async (thunkAPI) => {
+    try {
+      const res = await userService.getAllUsers();
+      return res;
+    } catch (err) {
+      console.log(err);
     }
-)
-
-const initialState = {
-    user: {
-      username: "",
-      firstname: "",
-      lastname: "",
-      address: "",
-      email: "",
-      role: "",
-    },
-    users: [],
-    loading: false,
-    error: false,
-    admin: false,
-    loggedin: false,
   }
+);
+//initial state
+const initialState = {
+  user: {
+    username: "",
+    firstname: "",
+    lastname: "",
+    address: "",
+    email: "",
+    role: "",
+  },
+  users: [],
+  loading: false,
+  error: false,
+  admin: false,
+  loggedin: false,
+};
 
 const userSlice = createSlice({
   name: "user",
-  initialState: initialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loginSF.fulfilled, (state, action)=>{
-        console.log('user state pre: ', state.user.toString())
-        state.user.username = action.payload.username;
-        state.user.email = action.payload.email;
-        state.user.role = action.payload.role;
-        console.log("action payload: ", action.payload)
-        console.log("user state: " , state.user)
-        
+    builder
+      .addCase(loginSF.fulfilled, (state, action) => {
+        console.log("user state pre: ", state.user);
+        state.user = action.payload;
+        console.log("action payload: ", action.payload);
+        console.log("user state: ", state.user);
         state.loggedin = true;
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(loginSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(loginSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(loginSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(registerSF.fulfilled, (state, action)=>{
+        return state;
+      })
+      .addCase(registerSF.fulfilled, (state, action) => {
         state.user = action.payload.user;
         localStorage.setItem("Token", action.payload.user.token);
-        if(action.payload.user.role === 'admin'){
-            state.admin = true;
+        if (action.payload.user.role === "admin") {
+          state.admin = true;
         }
-        state.loggedin = true
+        state.loggedin = true;
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(registerSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(registerSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(registerSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(authUserSF.fulfilled, (state, action)=>{
+        return state;
+      })
+      .addCase(authUserSF.fulfilled, (state, action) => {
         state.user = action.payload.user;
         localStorage.setItem("Token", action.payload.user.token);
         state.loading = false;
         state.error = false;
         state.loggedin = true;
-        if(action.payload.user.role === 'admin'){
-            state.admin = true;
+        if (action.payload.user.role === "admin") {
+          state.admin = true;
         }
-
-    });
-    builder.addCase(authUserSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(authUserSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(authUserSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(deleteUserSF.fulfilled, (state, action)=>{
-        state.users = []
+        return state;
+      })
+      .addCase(deleteUserSF.fulfilled, (state, action) => {
+        state.users = [];
         console.log(action.payload);
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(deleteUserSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(deleteUserSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(deleteUserSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(profileUserSF.fulfilled, (state, action)=>{
+        return state;
+      })
+      .addCase(profileUserSF.fulfilled, (state, action) => {
         state.users = action.payload.users;
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(profileUserSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(profileUserSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(profileUserSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(updateUserSF.fulfilled, (state, action)=>{
+        return state;
+      })
+      .addCase(updateUserSF.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(updateUserSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(updateUserSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(updateUserSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(getAllUsersSF.fulfilled, (state, action)=>{
+        return state;
+      })
+      .addCase(getAllUsersSF.fulfilled, (state, action) => {
         state.users = action.payload;
         console.log(state.users);
         state.loading = false;
         state.error = false;
-    });
-    builder.addCase(getAllUsersSF.rejected, (state, action)=>{
+        return state;
+      })
+      .addCase(getAllUsersSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(getAllUsersSF.rejected, (state, action) => {
         state.error = true;
-    });
-    builder.addCase(logOutUserSF.fulfilled, (state, action)=>{
-        state.user = {
-            username: "",
-            firstname: "",
-            lastname: "",
-            address: "",
-            email: "",
-            role: "",
-          }
-        state.users = [];
-        state.loading = false;
-        state.error = false;
-        state.admin = false;
-        state.loggedin = false;
-    });
+        return state;
+      })
+      .addCase(logOutUserSF.fulfilled, (state, action) => {
+        state = initialState;
+        localStorage.clear();
+        console.log(state.user);
+        return state;
+      })
+      .addCase(logOutUserSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(logOutUserSF.rejected, (state, action) => {
+        state.error = true;
+        return state;
+      });
   },
 });
 

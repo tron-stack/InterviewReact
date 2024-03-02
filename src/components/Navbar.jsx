@@ -1,13 +1,26 @@
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 import Logo from "../images/logo/logo-no-background.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { logOutUserSF } from "../api/userSlice";
 
-function Navbar() {
+function Navbar({ props }) {
   const [nav, setNav] = useState(false);
-  const navigate = useNavigate();
+  const loggedIn = props;
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const openNav = () => {
     setNav(!nav);
+  };
+
+  function handleLogOut() {
+    console.log('this is being called')
+    dispatch(logOutUserSF());
+    localStorage.clear();
+    navigate('/')
+    //dispatch(logOutReducer())
   };
 
   return (
@@ -33,12 +46,12 @@ function Navbar() {
               <Link onClick={openNav} to="/">
                 Models
               </Link>
-            </li> 
-             <li>
+            </li>
+            <li>
               <Link onClick={openNav} to="/">
                 Testimonials
               </Link>
-            </li> 
+            </li>
             <li>
               <Link onClick={openNav} to="/">
                 Our Team
@@ -49,17 +62,31 @@ function Navbar() {
                 Contact
               </Link>
             </li>
-            <li>
-              <Link onClick={openNav} to="/login">
-                Sign In
-              </Link>
-            </li>
-            <li>
-              <Link onClick={openNav} to="/register">
-                Register
-              </Link>
-            </li>
           </ul>
+          {loggedIn ? (
+            <ul>
+              <Link
+                className="navbar__buttons__register"
+                to="/login"
+                onClick={handleLogOut}
+              >
+                Log Out
+              </Link>
+            </ul>
+          ) : (
+            <ul>
+              <li>
+                <Link onClick={openNav} to="/login">
+                  Sign In
+                </Link>
+              </li>
+              <li>
+                <Link onClick={openNav} to="/register">
+                  Register
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
 
         {/* desktop */}
@@ -67,7 +94,11 @@ function Navbar() {
         <div className="navbar">
           <div className="navbar__img">
             <Link to="/" onClick={() => window.scrollTo(0, 0)}>
-              <img src={Logo} alt="logo-img" style={{height: '90px', width: 'auto', borderRadius: '35px'}} />
+              <img
+                src={Logo}
+                alt="logo-img"
+                style={{ height: "90px", width: "auto", borderRadius: "35px" }}
+              />
             </Link>
           </div>
           <ul className="navbar__links">
@@ -107,14 +138,25 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          <div className="navbar__buttons">
-            <Link className="navbar__buttons__sign-in" to='/login'>
-              Sign In
-            </Link>
-            <Link className="navbar__buttons__register" to="/register">
-              Register
-            </Link>
-          </div>
+          {loggedIn ? (
+            <div className="navbar__buttons">
+              <button
+                className="navbar__buttons__register"
+                onClick={handleLogOut}
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <div className="navbar__buttons">
+              <Link className="navbar__buttons__sign-in" to="/login">
+                Sign In
+              </Link>
+              <Link className="navbar__buttons__register" to="/register">
+                Register
+              </Link>
+            </div>
+          )}
 
           {/* mobile */}
           <div className="mobile-hamb" onClick={openNav}>

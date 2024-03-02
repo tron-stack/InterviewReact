@@ -107,7 +107,7 @@ body {
 }
 @media (max-width: 1000px) {
   .navbar__links {
-    display: none;
+    display: flex;
   }
 }
 .navbar__buttons {
@@ -127,6 +127,7 @@ body {
   color: #010103;
   cursor: pointer;
   transition: all 0.3s;
+  background-color: darksalmon;
 }
 .navbar__buttons__sign-in:hover {
   color: #ff4d30;
@@ -136,8 +137,8 @@ body {
   color: white;
   padding: 1.5rem 3rem;
   border-radius: 3px;
-  box-shadow: 0 10px 15px 0 rgba(255, 83, 48, 0.35);
-  transition: all 0.3s;
+  box-shadow: 0 10px 10px 0 rgba(255, 83, 48, 0.35);
+  transition: all 0.5s;
 }
 .navbar__buttons__register:hover {
   box-shadow: 0 10px 15px 0 rgba(255, 83, 48, 0.5);
@@ -787,11 +788,14 @@ body {
 .plan-section {
   background-color: #ffffff;
   padding: 5.3rem 0;
+  margin-top: 12rem;
+  position: absolute;
 }
 
 .plan-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 .plan-container__title {
   margin: 0 auto;
@@ -830,7 +834,9 @@ body {
 .plan-container__boxes__box {
   text-align: center;
   padding: 1rem 6rem;
+  cursor: pointer;
 }
+
 @media (max-width: 500px) {
   .plan-container__boxes__box {
     padding: 1rem 1rem;

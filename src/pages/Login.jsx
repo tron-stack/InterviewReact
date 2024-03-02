@@ -11,8 +11,9 @@ import logo from "../images/logo/logo-no-background.png";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSF } from "../api/userSlice";
+import { useEffect } from "react";
 
 function Copyright(props) {
     return (
@@ -36,19 +37,30 @@ function Login() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userState = useSelector((state)=>state.user.user);
+
 
   const handleClick = () => {
     navigate("/");
   };
 
+  useEffect(()=>{
+    console.log('local storage check');
+    console.log(userState);
+    if(localStorage.getItem("Token")){
+      navigate('/landing');
+    }
+
+  }, [userState, navigate])
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("username"));
+    console.log(typeof data.get("username"));
     console.log(data.get("password"));
     const user = {
         user: {
-            username: data.get("username"),
+            username: data.get("username").toLocaleLowerCase(),
             password: data.get('password')
         }
     }
