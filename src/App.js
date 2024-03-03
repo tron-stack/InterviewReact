@@ -6,7 +6,7 @@ import About from "./pages/About";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import LoginLanding from "./pages/LoginLanding";
-import { useSelector } from "react-redux";
+import PdfEditor from "./pages/PdfEditor";
 
 function PageNotFound() {
   return (
@@ -17,7 +17,6 @@ function PageNotFound() {
 }
 
 function App() {
-  const loggedIn = useSelector((state) => state.user.loggedin);
 
   return (
     <>
@@ -27,6 +26,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/landing" element={<LoginLanding />} />
+        <Route path="/document" element={<PdfEditor />} />
         <Route path="/404" element={PageNotFound} />
         <Route path="/*" element={<Navigate to="/404" />} />
       </Routes>

@@ -1,6 +1,5 @@
-import { Navigate } from "react-router";
 import axiosClient from "./axios";
-
+import axios from "axios";
 //dummy user
 // const user = {
 //   user: {
@@ -36,7 +35,7 @@ export const loginUser = async (user) => {
 export const getAllUsers = async () => {
   if (localStorage.getItem("Token")) {
     try {
-      const res = await axiosClient.get("/user/all");
+      const res = await axiosClient.get("/user/all", { headers: { "Authorization" : `Bearer ${localStorage.getItem('Token')}` }});
       return res.data;
     } catch (err) {
       console.log("err in catch: ", err);
@@ -47,16 +46,15 @@ export const getAllUsers = async () => {
 };
 //logout fn, clear token
 export const logOutUser = async () => {
-  const res = await axiosClient.get("/user/logout",  { headers:{
-    "Content-Type": "application/json",
-    "Token" : localStorage.getItem("Token"),
-  }});
+  const res = await axiosClient.get("/user/logout", {
+    headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` },
+  });
   return res;
 };
 //update user fn/ only admin can change role
 export const updateUser = async (user) => {
   try {
-    const res = await axiosClient.put("/user/update", user, { headers: { Token : localStorage.getItem('Token') }});
+    const res = await axiosClient.put("/user/update", user, { headers: { "Authorization" : `Bearer ${localStorage.getItem('Token')}` }});
     return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
@@ -64,7 +62,7 @@ export const updateUser = async (user) => {
 };
 export const deleteUser = async (user) => {
   try {
-    const res = await axiosClient.delete("/user/update", updateUser, { headers: { Token : localStorage.getItem('Token') }});
+    const res = await axiosClient.delete("/user/update", updateUser, { headers: { "Authorization" : `Bearer ${localStorage.getItem('Token')}` }});
     return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
@@ -72,9 +70,15 @@ export const deleteUser = async (user) => {
 };
 
 //authentication function, generates new JWT as well
-export const authUser = async (user) => {
+export const authUser = async (object) => {
   try {
-    const res = await axiosClient.get("/user", user, { headers: { Token : localStorage.getItem('Token') }});
+    const res = await axios.get("http://localhost:8000/user", object.user, {
+      headers: { Authorization: `Bearer ${object.token}` },
+    });
+    if (res.data.user.token) {
+      localStorage.setItem("Token", res.data.user.token);
+    }
+    res.data.user.token = "";
     return res.data;
   } catch (err) {
     console.log("err in catch: ", err);
@@ -83,7 +87,7 @@ export const authUser = async (user) => {
 
 export const profileUser = async (user) => {
   try {
-    const res = await axiosClient.get("/user/profile", user, { headers: { Token : localStorage.getItem('Token') }});
+    const res = await axiosClient.get("/user/profile", user, { headers: { "Authorization" : `Bearer ${localStorage.getItem('Token')}` }});
     return res.data;
   } catch (err) {
     console.log("err in catch: ", err);

@@ -1,4 +1,4 @@
-import {Tuple, configureStore, createSerializableStateInvariantMiddleware} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './api/userSlice';
 
 // const serializableMiddleWare = createSerializableStateInvariantMiddleware({

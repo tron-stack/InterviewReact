@@ -8,7 +8,7 @@ function PickService() {
     const navigate = useNavigate();
 
     const handleClick = () =>{
-        navigate('/');
+        navigate('/document');
     }
 
   return (
@@ -26,7 +26,7 @@ function PickService() {
                 <img src={Legal} alt="icon_img" />
                 <h3>Eviction Notice</h3>
                 <p>
-                  Our locations are secured with a security team that stays on the lot, as well as a secure fence with barbed wire around the facility. You will also find 24/7 infrared cameras covering the facility grounds.
+                  Have a tenant who is in default of their lease? Let us help you get the legal process going with our document service!
                 </p>
               </div>
 

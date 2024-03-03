@@ -47,25 +47,33 @@ function Login() {
   useEffect(()=>{
     console.log('local storage check');
     console.log(userState);
-    if(localStorage.getItem("Token")){
-      navigate('/landing');
+    // if(localStorage.getItem("Token")){
+    //   dispatch(authUserSF(userState)).then((res)=>{
+    //     console.log(res);
+    //   })
+    //   navigate('/landing');
+    // }
+    if(userState && localStorage.getItem("Token")){
+      //dispatch(authUserSF({user: userState, token: localStorage.getItem("token")}));
+      navigate('/landing')
     }
-
-  }, [userState, navigate])
+    // eslint-disable-next-line
+  }, [userState])
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(typeof data.get("username"));
+    console.log(data.get("username"));
     console.log(data.get("password"));
     const user = {
         user: {
-            username: data.get("username").toLocaleLowerCase(),
+            username: data.get("username").toLowerCase(),
             password: data.get('password')
         }
     }
 
-    dispatch(loginSF(user));
+    dispatch(loginSF(user))
+
 
 
   };

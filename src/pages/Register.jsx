@@ -12,7 +12,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { authUserSF } from "../api/userSlice";
 
 function Copyright(props) {
   return (
@@ -36,13 +37,14 @@ function Register() {
 
   const navigate = useNavigate();
   const userState = useSelector((state)=> state.user.user);
-
+  const dispatch = useDispatch();
   const handleClick = () =>{
     navigate('/');
   }
 
   useEffect(()=>{
-    if(userState.username !== ""){
+    if(userState && localStorage.getItem("Token")){
+      dispatch(authUserSF(userState));
       navigate('/landing')
     }
   },)

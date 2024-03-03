@@ -61,10 +61,12 @@ body {
   background-color: #ff2525;
 }
 
+
+
 .navbar {
   max-width: 190rem;
   width: 100%;
-  max-height: 120px;
+  max-height: 100px;
   height: auto;
   display: flex;
   justify-content: space-between;
@@ -208,6 +210,11 @@ body {
 
 .open-nav {
   left: 0;
+}
+
+.pdf-viewer-component{
+  /* margin-top: 120px; */
+  position: flex;
 }
 
 .hero-section {
@@ -835,6 +842,12 @@ body {
   text-align: center;
   padding: 1rem 6rem;
   cursor: pointer;
+}
+
+.plan-container__boxes__box:hover {
+  border: 2px solid red;
+  border-radius: 30px;
+  transition-duration: 0.2s;
 }
 
 @media (max-width: 500px) {

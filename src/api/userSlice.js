@@ -118,11 +118,15 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginSF.fulfilled, (state, action) => {
+        if(action.payload === undefined){return state;};
         console.log("user state pre: ", state.user);
         state.user = action.payload;
         console.log("action payload: ", action.payload);
         console.log("user state: ", state.user);
         state.loggedin = true;
+        if(state.user.role==='admin'){
+          state.admin = true;
+        }
         state.loading = false;
         state.error = false;
         return state;
@@ -136,11 +140,7 @@ const userSlice = createSlice({
         return state;
       })
       .addCase(registerSF.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        localStorage.setItem("Token", action.payload.user.token);
-        if (action.payload.user.role === "admin") {
-          state.admin = true;
-        }
+        state.user = action.payload;
         state.loggedin = true;
         state.loading = false;
         state.error = false;
@@ -155,14 +155,10 @@ const userSlice = createSlice({
         return state;
       })
       .addCase(authUserSF.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        localStorage.setItem("Token", action.payload.user.token);
+        state.user = action.payload;
         state.loading = false;
         state.error = false;
         state.loggedin = true;
-        if (action.payload.user.role === "admin") {
-          state.admin = true;
-        }
         return state;
       })
       .addCase(authUserSF.pending, (state) => {
@@ -189,7 +185,7 @@ const userSlice = createSlice({
         return state;
       })
       .addCase(profileUserSF.fulfilled, (state, action) => {
-        state.users = action.payload.users;
+        state.users = action.payload;
         state.loading = false;
         state.error = false;
         return state;
@@ -203,7 +199,7 @@ const userSlice = createSlice({
         return state;
       })
       .addCase(updateUserSF.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        state.user = action.payload;
         state.loading = false;
         state.error = false;
         return state;

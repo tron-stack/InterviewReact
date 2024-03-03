@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
 import Logo from "../images/logo/logo-no-background.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logOutUserSF } from "../api/userSlice";
 
