@@ -12,53 +12,48 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSF } from "../api/userSlice";
+import { loginSF, refreshTokenSF } from "../api/userSlice";
 import { useEffect } from "react";
+import { authUserSF } from "../api/userSlice";
+// import { getSession } from "../api/userService";
 
 function Copyright(props) {
-    return (
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        {...props}
-      >
-        {"Copyright © "}
-        <Link color="inherit" href="/">
-          Interview Project
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  }
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="/">
+        Interview Project
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 function Login() {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userState = useSelector((state)=>state.user.user);
-
+  const userState = useSelector((state) => state.user.user);
 
   const handleClick = () => {
     navigate("/");
   };
 
-  useEffect(()=>{
-    console.log('local storage check');
+  useEffect(() => {
+    console.log("local storage check");
     console.log(userState);
-    // if(localStorage.getItem("Token")){
-    //   dispatch(authUserSF(userState)).then((res)=>{
-    //     console.log(res);
-    //   })
-    //   navigate('/landing');
-    // }
-    if(userState && localStorage.getItem("Token")){
-      //dispatch(authUserSF({user: userState, token: localStorage.getItem("token")}));
-      navigate('/landing')
-    }
+    //navigate('/register')
+    if(userState && localStorage.getItem("Authorization")){
+      
+          navigate('/landing')
+        }
     // eslint-disable-next-line
-  }, [userState])
+  }, [userState]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -66,16 +61,12 @@ function Login() {
     console.log(data.get("username"));
     console.log(data.get("password"));
     const user = {
-        user: {
-            username: data.get("username").toLowerCase(),
-            password: data.get('password')
-        }
-    }
+      "username": data.get("username").toLowerCase(),
+      "password": data.get("password"),
+    };
 
-    dispatch(loginSF(user))
-
-
-
+    dispatch(loginSF(user));
+    // getSession();
   };
 
   return (
@@ -147,7 +138,7 @@ function Login() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

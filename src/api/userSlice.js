@@ -26,6 +26,18 @@ export const registerSF = createAsyncThunk(
   }
 );
 
+export const refreshTokenSF = createAsyncThunk(
+  'user/refreshToken',
+  async (thunkAPI) => {
+    try {
+      return await userService.getRefreshToken();
+    } catch (err) {
+      console.log(err);
+      return thunkAPI.rejectWithValue("something went wrong");
+    }
+  }
+)
+
 export const authUserSF = createAsyncThunk(
   "user/auth",
   async (user, thunkAPI) => {
@@ -155,7 +167,8 @@ const userSlice = createSlice({
         return state;
       })
       .addCase(authUserSF.fulfilled, (state, action) => {
-        state.user = action.payload;
+        if(action.payload === undefined){return state;}
+        state.user = action.payload.user;
         state.loading = false;
         state.error = false;
         state.loggedin = true;
@@ -240,7 +253,30 @@ const userSlice = createSlice({
       .addCase(logOutUserSF.rejected, (state, action) => {
         state.error = true;
         return state;
-      });
+      })
+      .addCase(refreshTokenSF.fulfilled, (state, action) => {
+        if(action.payload === undefined){return state;};
+        console.log("user state pre: ", state.user);
+        state.user = action.payload;
+        console.log("action payload: ", action.payload);
+        console.log("user state: ", state.user);
+        state.loggedin = true;
+        if(state.user.role==='admin'){
+          state.admin = true;
+        }
+        state.loading = false;
+        state.error = false;
+        return state;
+      })
+      .addCase(refreshTokenSF.pending, (state) => {
+        state.loading = true;
+        return state;
+      })
+      .addCase(refreshTokenSF.rejected, (state, action) => {
+        state.error = true;
+        return state;
+      })
+      ;
   },
 });
 

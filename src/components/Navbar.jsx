@@ -1,26 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../images/logo/logo-no-background.png";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logOutUserSF } from "../api/userSlice";
 
 function Navbar({ props }) {
   const [nav, setNav] = useState(false);
+  const username = useSelector((state) => state.user.user.username);
   const loggedIn = props;
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const openNav = () => {
     setNav(!nav);
   };
 
   function handleLogOut() {
-    console.log('this is being called')
-    dispatch(logOutUserSF());
+    // console.log("this is being called");
+    dispatch(logOutUserSF({ user: { username: username } }));
     localStorage.clear();
-    navigate('/')
+    navigate("/");
     //dispatch(logOutReducer())
-  };
+  }
 
   return (
     <>
@@ -91,7 +92,7 @@ function Navbar({ props }) {
         {/* desktop */}
 
         <div className="navbar">
-          <div className="navbar__img">
+          <div className="navbar__img" tabIndex={1}>
             <Link to="/" onClick={() => window.scrollTo(0, 0)}>
               <img
                 src={Logo}
@@ -102,13 +103,13 @@ function Navbar({ props }) {
           </div>
           <ul className="navbar__links">
             <li>
-              <Link className="home-link" to="/">
+              <Link className="home-link" to="/" tabIndex={2}>
                 Home
               </Link>
             </li>
             <li>
               {" "}
-              <Link className="about-link" to="/about">
+              <Link className="about-link" to="/about" tabIndex={3}>
                 About
               </Link>
             </li>
@@ -120,19 +121,19 @@ function Navbar({ props }) {
             </li> */}
             <li>
               {" "}
-              <Link className="testi-link" to="/">
+              <Link className="testi-link" to="/" tabIndex={4}>
                 Testimonials
               </Link>
             </li>
             <li>
               {" "}
-              <Link className="team-link" to="/">
+              <Link className="team-link" to="/" tabIndex={5}>
                 Our Team
               </Link>
             </li>
             <li>
               {" "}
-              <Link className="contact-link" to="/">
+              <Link className="contact-link" to="/" tabIndex={6}>
                 Contact
               </Link>
             </li>
@@ -142,16 +143,17 @@ function Navbar({ props }) {
               <button
                 className="navbar__buttons__register"
                 onClick={handleLogOut}
+                tabIndex={7}
               >
                 Log Out
               </button>
             </div>
           ) : (
             <div className="navbar__buttons">
-              <Link className="navbar__buttons__sign-in" to="/login">
+              <Link className="navbar__buttons__sign-in" to="/login" tabIndex={7}>
                 Sign In
               </Link>
-              <Link className="navbar__buttons__register" to="/register">
+              <Link className="navbar__buttons__register" to="/register" tabIndex={8}>
                 Register
               </Link>
             </div>

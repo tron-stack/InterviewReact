@@ -22,7 +22,7 @@ function PickService() {
             </div>
 
             <div className="plan-container__boxes">
-              <div className="plan-container__boxes__box" onClick={handleClick} >
+              <div className="plan-container__boxes__box" onClick={handleClick} tabIndex={1}>
                 <img src={Legal} alt="icon_img" />
                 <h3>Eviction Notice</h3>
                 <p>
@@ -31,7 +31,7 @@ function PickService() {
               </div>
 
               <div className="plan-container__boxes__box">
-                <img src={Contact} alt="icon_img" />
+                <img src={Contact} alt="icon_img" tabIndex={2} />
                 <h3>Coming Soon!</h3>
                 <p>
                   Our knowledgeable and friendly operators are always ready to
@@ -40,7 +40,7 @@ function PickService() {
               </div>
 
               <div className="plan-container__boxes__box">
-                <img src={Work} alt="icon_img" />
+                <img src={Work} alt="icon_img" tabIndex={3}/>
                 <h3>Coming Soon!</h3>
                 <p>
                   We are working to add more amazing features!
