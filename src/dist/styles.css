@@ -803,6 +803,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 18%;
 }
 .plan-container__title {
   margin: 0 auto;
