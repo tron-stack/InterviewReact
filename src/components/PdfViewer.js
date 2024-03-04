@@ -34,16 +34,6 @@ function PdfViewComponent(props) {
         baseUrl: `${window.location.protocol}//${window.location.host}//${process.env.PUBLIC_URL}`,
         toolbarItems: [...PSPDFKit.defaultToolbarItems, item]
       });
-
-      
-
-        
-
-    //   const arrayBuffer = await instance.exportPDF();
-    //   const blob = new Blob([arrayBuffer], { type: "application/pdf" });
-    //   const formData = new FormData();
-    //   formData.append("file", blob);
-    //   await axiosClient.post("/docs/", formData);
     })();
 
     return () => PSPDFKit && PSPDFKit.unload(container);
